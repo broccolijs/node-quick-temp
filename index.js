@@ -5,20 +5,20 @@ var rimraf = require('rimraf')
 var underscoreString = require('underscore.string')
 
 exports.makeOrRemake = makeOrRemake
-function makeOrRemake(obj, prop, className) {
+function makeOrRemake(obj, prop, className, cwd) {
   if (obj[prop] != null) {
     remake(obj, prop)
     return obj[prop]
   }
-  return obj[prop] = makeTmpDir(obj, prop, className)
+  return obj[prop] = makeTmpDir(obj, prop, className, cwd)
 }
 
 exports.makeOrReuse = makeOrReuse
-function makeOrReuse(obj, prop, className) {
+function makeOrReuse(obj, prop, className, cwd) {
   if (obj[prop] != null) {
     return obj[prop]
   }
-  return obj[prop] = makeTmpDir(obj, prop, className)
+  return obj[prop] = makeTmpDir(obj, prop, className, cwd)
 }
 
 exports.remake = remake
@@ -39,18 +39,19 @@ function remove(obj, prop) {
 }
 
 
-function makeTmpDir(obj, prop, className) {
+function makeTmpDir(obj, prop, className, cwd) {
   if (className == null) className = obj.constructor && obj.constructor.name
   var tmpDirName = prettyTmpDirName(className, prop)
-  return mktemp.createDirSync(path.join(findBaseDir(), tmpDirName))
+  return mktemp.createDirSync(path.join(findBaseDir(cwd), tmpDirName))
 }
 
-function currentTmp() {
-  return path.join(process.cwd(), 'tmp')
+function currentTmp(cwd) {
+  var dir = cwd || process.cwd()
+  return path.join(dir, 'tmp')
 }
 
-function findBaseDir () {
-  var tmp = currentTmp();
+function findBaseDir (cwd) {
+  var tmp = currentTmp(cwd);
   try {
     if (fs.statSync(tmp).isDirectory()) {
       return tmp;
