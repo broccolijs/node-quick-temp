@@ -4,6 +4,14 @@ var mktemp = require('mktemp')
 var rimraf = require('rimraf')
 var underscoreString = require('underscore.string')
 
+exports.buildTmpPath = buildTmpPath
+function buildTmpPath(obj, prop, className) {
+  if (className == null) className = obj.constructor && obj.constructor.name
+
+  var tmpDirName = prettyTmpDirName(className, prop)
+  return obj[prop] = path.join(findBaseDir(), tmpDirName)
+}
+
 exports.makeOrRemake = makeOrRemake
 function makeOrRemake(obj, prop, className) {
   if (obj[prop] != null) {
@@ -40,9 +48,8 @@ function remove(obj, prop) {
 
 
 function makeTmpDir(obj, prop, className) {
-  if (className == null) className = obj.constructor && obj.constructor.name
-  var tmpDirName = prettyTmpDirName(className, prop)
-  return mktemp.createDirSync(path.join(findBaseDir(), tmpDirName))
+  var tmpDirPath = buildTmpPath(obj, prop, className)
+  return mktemp.createDirSync(tmpDirPath)
 }
 
 function currentTmp() {

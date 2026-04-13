@@ -50,3 +50,20 @@ quickTemp.remove(this, 'tmpDestDir');
 
 This will also assign `this.tmpDestDir = null`. If `this.tmpDestDir` is
 already null or undefined, it will be a no-op.
+
+### Building a temporary directory path
+
+To generate a temporary directory path (but not create it) and assign its
+path to `this.someThing`, call:
+
+```js
+quickTemp.buildTmpPath(this, 'someThing')
+```
+
+An optional third argument lets you override the class-name component of the
+temporary directory name:
+
+```js
+quickTemp.buildTmpPath(this, 'tmpDestDir', 'TreeMerger');
+quickTemp.buildTmpPath(this, 'tmpDestDir', this.constructor.name); // default
+```
