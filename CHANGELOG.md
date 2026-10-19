@@ -1,5 +1,7 @@
 # master
 
+* Remove the underscore.string dependency
+
 # 0.1.10
 
 * Update dependencies

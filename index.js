@@ -2,7 +2,6 @@ var fs = require('fs')
 var path = require('path')
 var mktemp = require('mktemp')
 var rimraf = require('rimraf')
-var underscoreString = require('underscore.string')
 
 exports.makeOrRemake = makeOrRemake
 function makeOrRemake(obj, prop, className) {
@@ -64,8 +63,16 @@ function findBaseDir () {
   }
 }
 
+// Same as underscore.string's `underscored`: "MyClass" -> "my_class"
+function underscored (s) {
+  return ('' + s).trim()
+    .replace(/([a-z\d])([A-Z]+)/g, '$1_$2')
+    .replace(/[-\s]+/g, '_')
+    .toLowerCase()
+}
+
 function cleanString (s) {
-  return underscoreString.underscored(s || '')
+  return underscored(s || '')
     .replace(/[^a-z_]/g, '')
     .replace(/^_+/, '')
 }

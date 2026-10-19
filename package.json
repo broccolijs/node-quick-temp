@@ -11,8 +11,7 @@
   },
   "dependencies": {
     "mktemp": "^2.0.1",
-    "rimraf": "^5.0.10",
-    "underscore.string": "~3.3.6"
+    "rimraf": "^5.0.10"
   },
   "devDependencies": {
     "chai": "^6.2.1",
